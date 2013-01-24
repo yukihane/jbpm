@@ -21,6 +21,7 @@
 <beans xmlns="http://java.sun.com/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
        xmlns:s="urn:java:ee"
        xmlns:t="urn:java:org.jboss.seam.transaction"
+       xmlns:m="urn:java:org.droolsjbpm.services.impl.util"
        xmlns:task="urn:java:org.jbpm.task.annotations"
        xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://docs.jboss.org/cdi/beans_1_0.xsd">
     
@@ -37,13 +38,15 @@
         <class>org.jboss.seam.transaction.TransactionInterceptor</class>
     </interceptors>
     
-    <t:SeSynchronizations>
+    <!--t:SeSynchronizations>
         <s:modifies/>
-    </t:SeSynchronizations>
-
-    <t:EntityTransaction>
+    </t:SeSynchronizations-->
+    <m:BTMTransactionManagerSynchronizations>
+        <s:modifies/>
+    </m:BTMTransactionManagerSynchronizations>
+    <m:DefaultBitronixTransaction>
         <s:modifies />
-    </t:EntityTransaction>
+    </m:DefaultBitronixTransaction>
     
     
 </beans>

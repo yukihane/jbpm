@@ -51,7 +51,7 @@ import org.kie.runtime.rule.QueryResults;
 public abstract class DomainKnowledgeServiceWithRulesBaseTest {
 
     @Inject
-    protected TaskServiceEntryPoint taskService;
+    protected transient TaskServiceEntryPoint taskService;
     @Inject
     private BPMN2DataService bpmn2Service;
     @Inject
@@ -69,7 +69,7 @@ public abstract class DomainKnowledgeServiceWithRulesBaseTest {
     @Inject
     private NotificationWorkItemHandler notificationWorkItemHandler;
     @Inject
-    private RulesNotificationService rulesNotificationService;
+    private transient RulesNotificationService rulesNotificationService;
 
     
     @Test
@@ -88,10 +88,14 @@ public abstract class DomainKnowledgeServiceWithRulesBaseTest {
         String kSessionName = "myKsession";
         for (Path p : processFiles) {
 
-            System.out.println(" >>> Loading Path -> " + p.toString());
-            myDomain.addProcessDefinitionToKsession(kSessionName, p);
+            
             String processString = new String(fs.loadFile(p));
-            myDomain.addProcessBPMN2ContentToKsession(kSessionName, bpmn2Service.findProcessId(processString), processString);
+            String processId = bpmn2Service.findProcessId(processString);
+            if(!processId.equals("")){
+              System.out.println(" >>> Loading Path -> " + p.toString());
+              myDomain.addProcessDefinitionToKsession(kSessionName, p);
+              myDomain.addProcessBPMN2ContentToKsession(kSessionName, processId , processString);
+            }
         }
         for (Path p : rulesFiles) {
             System.out.println(" >>> Loading Path -> " + p.toString());

@@ -66,7 +66,7 @@ public class CDIBAMProcessEventListener implements ProcessEventListener {
         if(version == null){
             version = "";
         }
-        em.persist(new BAMProcessSummary(processInstance.getId(), processInstance.getProcessName(), StateHelper.getProcessState(processInstance.getState()), new Date(), identity.getName(), version));
+        //em.persist(new BAMProcessSummary(processInstance.getId(), processInstance.getProcessName(), StateHelper.getProcessState(processInstance.getState()), new Date(), identity.getName(), version));
     }
 
     @Override
@@ -76,10 +76,12 @@ public class CDIBAMProcessEventListener implements ProcessEventListener {
         if (currentState == ProcessInstance.STATE_ACTIVE) {
             ProcessInstance processInstance = pse.getProcessInstance();
             int sessionId = ((StatefulKnowledgeSession)pse.getKieRuntime()).getId();
-            BAMProcessSummary processSummaryById = (BAMProcessSummary)em.createQuery("select bps from BAMProcessSummary bps where bps.processInstanceId =:processId")
-                                                    .setParameter("processId", processInstance.getId()).getSingleResult();
-            processSummaryById.setStatus(StateHelper.getProcessState(processInstance.getState()));
-            em.merge(processSummaryById);
+            String version = processInstance.getProcess().getVersion();
+//            BAMProcessSummary processSummaryById = (BAMProcessSummary)em.createQuery("select bps from BAMProcessSummary bps where bps.processInstanceId =:processId")
+//                                                    .setParameter("processId", processInstance.getId()).getSingleResult();
+//            processSummaryById.setStatus(StateHelper.getProcessState(processInstance.getState()));
+//            em.merge(processSummaryById);
+            em.persist(new BAMProcessSummary(processInstance.getId(), processInstance.getProcessName(), StateHelper.getProcessState(processInstance.getState()), new Date(), identity.getName(), version));
         }
     }
 

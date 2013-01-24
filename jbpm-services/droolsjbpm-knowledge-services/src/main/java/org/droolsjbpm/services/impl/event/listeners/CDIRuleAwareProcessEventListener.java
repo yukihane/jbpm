@@ -22,14 +22,9 @@ import org.kie.runtime.KieRuntime;
 @Transactional
 public class CDIRuleAwareProcessEventListener implements ProcessEventListener {
     
-    private ConcurrentHashMap<Long, FactHandle> store = new ConcurrentHashMap<Long, FactHandle>();
 
-    public void beforeProcessStarted(ProcessStartedEvent event) {
-        
-        FactHandle handle = event.getKieRuntime().insert(event.getProcessInstance());
-        store.put(event.getProcessInstance().getId(), handle);
-        
-        
+    public void beforeProcessStarted(ProcessStartedEvent event) {        
+        event.getKieRuntime().insert(event.getProcessInstance());
     }
 
     public void afterProcessStarted(ProcessStartedEvent event) {
@@ -81,18 +76,14 @@ public class CDIRuleAwareProcessEventListener implements ProcessEventListener {
         if (handle != null) {
             event.getKieRuntime().update(handle, event.getProcessInstance());
         } else {
-            handle = event.getKieRuntime().insert(event.getProcessInstance());
-            store.put(event.getProcessInstance().getId(), handle);
+            event.getKieRuntime().insert(event.getProcessInstance());
+          
         }
     }
 
     protected FactHandle getProcessInstanceFactHandle(final Long processInstanceId, KieRuntime kruntime) {
         
-        if (store.containsKey(processInstanceId)) {
-            return store.get(processInstanceId);
-        }
-        
-        //else try to search for it in the working memory
+
         Collection<FactHandle> factHandles = kruntime.getFactHandles(new ObjectFilter() {
             
             public boolean accept(Object object) {
@@ -107,8 +98,6 @@ public class CDIRuleAwareProcessEventListener implements ProcessEventListener {
         
         if (factHandles != null && factHandles.size() > 0) {
             FactHandle handle = factHandles.iterator().next();
-            // put it into store for faster access
-            store.put(processInstanceId, handle);
             return handle;
         }
         return null;
