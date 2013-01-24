@@ -1,5 +1,7 @@
 package org.droolsjbpm.services.impl.event.listeners;
 
+import org.droolsjbpm.services.impl.event.NodeInstanceLeftEvent;
+import org.droolsjbpm.services.impl.event.NodeInstanceTriggeredEvent;
 import org.jboss.seam.transaction.Transactional;
 import org.kie.event.process.ProcessCompletedEvent;
 import org.kie.event.process.ProcessEventListener;
@@ -29,12 +31,12 @@ public class CDIRuleAwareProcessEventListener implements ProcessEventListener {
 
     public void afterProcessStarted(ProcessStartedEvent event) {
         // do nothing
-        event.getKieRuntime().getEntryPoint("process-events").insert(event);
+        event.getKieRuntime().getEntryPoint("process-events").insert(new org.droolsjbpm.services.impl.event.ProcessStartedEvent(event));
         ((StatefulKnowledgeSession) event.getKieRuntime()).fireAllRules();
     }
 
     public void beforeProcessCompleted(ProcessCompletedEvent event) {
-        event.getKieRuntime().getEntryPoint("process-events").insert(event);
+        event.getKieRuntime().getEntryPoint("process-events").insert(new org.droolsjbpm.services.impl.event.ProcessCompletedEvent(event));
         ((StatefulKnowledgeSession) event.getKieRuntime()).fireAllRules();
     }
 
@@ -48,7 +50,7 @@ public class CDIRuleAwareProcessEventListener implements ProcessEventListener {
 
     public void beforeNodeTriggered(ProcessNodeTriggeredEvent event) {
         // do nothing
-        event.getKieRuntime().getEntryPoint("process-events").insert(event);
+        event.getKieRuntime().getEntryPoint("process-events").insert(new NodeInstanceTriggeredEvent(event));
         ((StatefulKnowledgeSession) event.getKieRuntime()).fireAllRules();
         
     }
@@ -58,7 +60,7 @@ public class CDIRuleAwareProcessEventListener implements ProcessEventListener {
     }
 
     public void beforeNodeLeft(ProcessNodeLeftEvent event) {
-        event.getKieRuntime().getEntryPoint("process-events").insert(event);
+        event.getKieRuntime().getEntryPoint("process-events").insert(new NodeInstanceLeftEvent(event));
         ((StatefulKnowledgeSession) event.getKieRuntime()).fireAllRules();
     }
 

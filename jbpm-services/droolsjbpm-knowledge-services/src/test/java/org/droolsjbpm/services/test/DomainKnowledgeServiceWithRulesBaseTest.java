@@ -154,7 +154,7 @@ public abstract class DomainKnowledgeServiceWithRulesBaseTest {
         Collection<RuleNotificationInstanceDesc> allNotificationInstance = rulesNotificationService.getAllNotificationInstance();
         assertEquals(1, allNotificationInstance.size());
         
-        Collection<RuleNotificationInstanceDesc> notificationsBySessionId = rulesNotificationService.getAllNotificationInstanceBySessionId(0);
+        Collection<RuleNotificationInstanceDesc> notificationsBySessionId = rulesNotificationService.getAllNotificationInstanceBySessionId(1);
         assertEquals(1, notificationsBySessionId.size());
 
 

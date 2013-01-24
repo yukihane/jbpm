@@ -16,13 +16,18 @@
 package org.droolsjbpm.services.impl.util;
 
 import bitronix.tm.TransactionManagerServices;
+import javax.enterprise.context.ApplicationScoped;
 import javax.transaction.TransactionManager;
+import org.jboss.seam.transaction.Synchronizations;
 import org.jboss.seam.transaction.TransactionManagerSynchronizations;
+import org.jboss.solder.bean.defaultbean.DefaultBean;
 
 /**
  *
  * @author salaboy
  */
+@ApplicationScoped
+@DefaultBean(Synchronizations.class)
 public class BTMTransactionManagerSynchronizations extends TransactionManagerSynchronizations{
 
   @Override

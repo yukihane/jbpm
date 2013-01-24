@@ -15,6 +15,8 @@
  */
 package org.droolsjbpm.services.wih.test;
 
+import java.io.IOException;
+
 import bitronix.tm.resource.jdbc.PoolingDataSource;
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.junit.Arquillian;
@@ -22,6 +24,7 @@ import org.jboss.shrinkwrap.api.Archive;
 import org.jboss.shrinkwrap.api.ArchivePaths;
 import org.jboss.shrinkwrap.api.ShrinkWrap;
 import org.jboss.shrinkwrap.api.spec.JavaArchive;
+import org.jbpm.shared.services.api.FileException;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.runner.RunWith;
@@ -75,25 +78,24 @@ public class DomainKnowledgeServiceWorkItemsCDITest extends DomainKnowledgeServi
      private PoolingDataSource ds = new PoolingDataSource();
     
     @Before
-    public void setUp(){
+    public void setUp() throws IOException, FileException{
         ds.setUniqueName("jdbc/testDS1");
-        
 
-          //NON XA CONFIGS
-          ds.setClassName("org.h2.jdbcx.JdbcDataSource");
-          ds.setMaxPoolSize(3);
-          ds.setAllowLocalTransactions(true);
-          ds.getDriverProperties().put("user", "sa");
-          ds.getDriverProperties().put("password", "sasa");
-          ds.getDriverProperties().put("URL", "jdbc:h2:mem:mydb");
+        // NON XA CONFIGS
+        ds.setClassName("org.h2.jdbcx.JdbcDataSource");
+        ds.setMaxPoolSize(3);
+        ds.setAllowLocalTransactions(true);
+        ds.getDriverProperties().put("user", "sa");
+        ds.getDriverProperties().put("password", "sasa");
+        ds.getDriverProperties().put("URL", "jdbc:h2:mem:mydb");
 
-          ds.init();
-        
+        ds.init();
+        super.setUp();
     }
     
     @After
     public void tearDown() throws Exception {
-        
+        super.cleanUp();
         ds.close();
     }
 
