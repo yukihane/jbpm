@@ -246,7 +246,7 @@
   <target name="download.eclipse" depends="download.eclipse.check" if="eclipse.not.available">
     <echo message="Getting Eclipse ..." />
     <mkdir dir="${install.home}/lib"/>
-    <get src="http://download.eclipse.org/technology/epp/downloads/release/helios/SR2/eclipse-java-helios-SR2-${download.type}.${download.extension}"
+    <get src="http://www.eclipse.org/downloads/download.php?file=/technology/epp/downloads/release/helios/SR2/eclipse-java-helios-SR2-${download.type}.${download.extension}"
          dest="${install.home}/lib/eclipse-java-helios-SR2-${download.type}.${download.extension}"  />
   </target>
   <target name="download.eclipse.gef.check">
