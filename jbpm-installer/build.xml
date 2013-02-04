@@ -182,6 +182,16 @@
     <and>
       <os family="mac" />
       <os family="unix" />
+      <not>
+        <os arch="x86_64" />
+      </not>
+    </and>
+  </condition>
+  <condition property="download.type" value="macosx-cocoa-x86_64">
+    <and>
+      <os family="mac" />
+      <os family="unix" />
+      <os arch="x86_64" />
     </and>
   </condition>
   <condition property="download.type" value="linux-gtk">
